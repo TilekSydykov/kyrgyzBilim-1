@@ -1,17 +1,17 @@
 package com.kyrgyzbilim.ui.adapters
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.kyrgyzbilim.R
-import com.kyrgyzbilim.data.remote.course.Course
-import com.kyrgyzbilim.data.remote.sections.Section
 import com.kyrgyzbilim.data.remote.topic.Topic
+import com.kyrgyzbilim.ui.courses.sections.SectionsFragment
 import kotlinx.android.synthetic.main.item_sections.view.*
 import kotlinx.android.synthetic.main.item_themes.view.*
 
@@ -19,6 +19,8 @@ import kotlinx.android.synthetic.main.item_themes.view.*
 class ThemesAdapter : ListAdapter<Topic, ThemesAdapter.ThemeViewHolder>(DIFF) {
     private lateinit var onClickListener: ThemesOnClickListener
     private lateinit var items: List<Topic>
+    private lateinit var framentManager: FragmentManager
+
 
 
     companion object{
@@ -35,13 +37,15 @@ class ThemesAdapter : ListAdapter<Topic, ThemesAdapter.ThemeViewHolder>(DIFF) {
     }
 
     fun setData(
-       onClickListener: ThemesOnClickListener,
-       items: List<Topic>?,
+        onClickListener: ThemesOnClickListener,
+        items: List<Topic>?,
+        framentManager: FragmentManager,
     ){
         this.onClickListener = onClickListener
         if (items != null) {
             this.items = items
         }
+        this.framentManager = framentManager
     }
 
     inner class ThemeViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
@@ -57,7 +61,16 @@ class ThemesAdapter : ListAdapter<Topic, ThemesAdapter.ThemeViewHolder>(DIFF) {
                 onClickListener.onClickTheme(position)
             }
 
+            val sectionsFragment: Fragment = SectionsFragment()
             itemView.theme_title.setOnClickListener{
+                framentManager.beginTransaction()
+                    .setCustomAnimations(
+                        R.animator.slide_in_left,
+                        R.animator.slide_out_right, 0, 0
+                    )
+                    .replace(R.id.fragment_home, sectionsFragment)
+                    .addToBackStack(null)
+                    .commit()
 
             }
 
@@ -74,7 +87,13 @@ class ThemesAdapter : ListAdapter<Topic, ThemesAdapter.ThemeViewHolder>(DIFF) {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThemeViewHolder {
-        return ThemeViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_themes,parent,false))
+        return ThemeViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_themes,
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ThemeViewHolder, position: Int) {

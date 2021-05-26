@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.widget.LinearLayout
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +24,8 @@ import kotlinx.android.synthetic.main.item_sections.view.*
 class SectionAdapter(
     private val onClickListener: SectionClickListener,
     private val themesOnClickListener: ThemesAdapter.ThemesOnClickListener,
-    private var sectionList: List<Section>?
+    private var sectionList: List<Section>?,
+    private var framentManager: FragmentManager
 ) : ListAdapter<Section, SectionAdapter.SectionViewHolder>(DIFF) {
 
     private lateinit var context: Context

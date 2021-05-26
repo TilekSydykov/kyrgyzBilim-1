@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import com.kyrgyzbilim.R
 import com.kyrgyzbilim.base.ApiResult
@@ -110,7 +111,8 @@ class SectionsFragment : Fragment(), SectionAdapter.SectionClickListener,
 
     private fun initList(sections: List<Section>?, topics: List<Topic>?) {
 
-        sectionAdapter = SectionAdapter(this, this, sections)
+        var f_manager: FragmentManager = requireActivity().supportFragmentManager
+        sectionAdapter = SectionAdapter(this, this, sections,f_manager)
 
         themesAdapter = ThemesAdapter()
         themesAdapter.setData(this, topics)
